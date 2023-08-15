@@ -1,17 +1,12 @@
 import { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { getImage } from 'services/getImage';
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
-
-// const STATUS = {
-//   IDLE: 'idle',
-//   PENDING: 'pending',
-//   REJECTED: 'rejected',
-//   RESOLVED: 'resolved',
-// };
 
 export class App extends Component {
   state = {
@@ -22,7 +17,6 @@ export class App extends Component {
     currentPage: 1,
     error: null,
     isLoading: false,
-    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -52,7 +46,7 @@ export class App extends Component {
       const dataImages = await getImage(searchText, currentPage);
 
       if (dataImages.hits.length === 0) {
-        return alert('Sorry image not found...');
+        toast.info('Sorry image not found...');
       }
 
       this.setState(state => ({
@@ -60,7 +54,9 @@ export class App extends Component {
         isLoading: false,
       }));
     } catch (error) {
-      this.setState({ error: 'Something went wrong!' });
+      toast.error(`Something went wrong! Error message: ${error.message}`);
+      console.log(error);
+      // this.setState({ error: 'Something went wrong!' });
     } finally {
       this.setState({ isLoading: false });
     }
@@ -91,6 +87,7 @@ export class App extends Component {
     return (
       <>
         <Searchbar handleSearch={this.handleSearch} />;
+        <ToastContainer autoClose={3000} />
         {images.length > 0 && (
           <ImageGallery images={images} selectedImg={this.handleSelectedImg} />
         )}
