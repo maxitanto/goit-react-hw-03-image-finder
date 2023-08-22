@@ -92,7 +92,7 @@ export class App extends Component {
           <ImageGallery images={images} selectedImg={this.handleSelectedImg} />
         )}
         {isLoading && <Loader />}
-        {images.length > 0 && <Button onClick={this.loadMore} />}
+        {images.length > 0 && !isLoading && <Button onClick={this.loadMore} />}
         {selectedLargeImage && (
           <Modal
             selectedLargeImage={selectedLargeImage}
